@@ -1,0 +1,27 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/ubuntu-24.04-amd64"
+
+  nodes = {
+    "cp1" => "192.168.56.11",
+    "cp2" => "192.168.56.12",
+    "cp3" => "192.168.56.13",
+    "worker1" => "192.168.56.21"
+  }
+
+  nodes.each do |name, ip|
+    config.vm.define name do |node|
+      node.vm.hostname = name
+      node.vm.network "private_network", ip: ip
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = 4096
+        vb.cpus = 2
+      end
+
+      node.vm.provision "shell", path: "scripts/base.sh"
+      node.vm.provision "shell", path: "scripts/install-k8s.sh"
+      if name.start_with?("cp")
+        node.vm.provision "shell", path: "scripts/haproxy.sh"
+      end
+    end
+  end
+end
