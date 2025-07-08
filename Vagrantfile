@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/ubuntu-24.04-amd64"
+  config.vm.box = "ubuntu/noble64"
 
   nodes = {
     "cp1" => "192.168.56.11",
