@@ -7,6 +7,7 @@ apt-get install -y containerd apt-transport-https ca-certificates curl gnupg lsb
 
 mkdir -p /etc/containerd
 containerd config default > /etc/containerd/config.toml
+sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 systemctl restart containerd
 systemctl enable containerd
 
